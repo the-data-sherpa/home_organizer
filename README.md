@@ -1,36 +1,110 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🏠 Home Organizer
+
+A modern family command center designed for touchscreen displays. Manage meals, chores, grocery lists, and family calendars from a central hub.
+
+![Next.js](https://img.shields.io/badge/Next.js-16-black)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-06B6D4)
+
+## Features
+
+- **🍽️ Meal Planning** — Weekly meal calendar with recipe management, nutrition tracking, and kid meal suggestions
+- **✅ Chores** — Assigned and claimable chores with points/rewards system
+- **🛒 Smart Grocery** — Auto-generated shopping lists from meal plans with mobile sync
+- **📅 Calendar** — Family schedule at a glance
+- **📱 Multi-device** — Touchscreen display + mobile PWA
+
+## Tech Stack
+
+- **Framework:** Next.js 16 (App Router)
+- **Styling:** Tailwind CSS v4 + shadcn/ui + Aceternity UI
+- **Language:** TypeScript
+- **Database:** Vercel Postgres (coming soon)
+- **Auth:** 6-digit household PIN
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+
+- npm or yarn
+
+### Installation
+
+```bash
+# Clone the repo
+git clone https://github.com/the-data-sherpa/home_organizer.git
+cd home_organizer
+
+# Install dependencies
+npm install
+
+# Set up environment variables
+cp .env.example .env.local
+```
+
+### Configure Your PIN
+
+Generate a PIN hash:
+
+```bash
+node -e "console.log(require('crypto').createHash('sha256').update('YOUR_6_DIGIT_PIN').digest('hex'))"
+```
+
+Add the hash to `.env.local`:
+
+```
+FAMILY_PIN_HASH=your_generated_hash_here
+```
+
+### Run Development Server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**Default dev PIN:** `123456`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Project Structure
 
-## Learn More
+```
+src/
+├── app/
+│   ├── api/auth/        # Auth endpoints
+│   ├── login/           # PIN entry page
+│   ├── page.tsx         # Dashboard
+│   └── layout.tsx       # Root layout
+├── components/
+│   ├── aceternity/      # Aceternity UI components
+│   └── ui/              # shadcn/ui components
+├── lib/
+│   ├── auth.ts          # Auth utilities
+│   └── utils.ts         # Helpers
+└── middleware.ts        # Route protection
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Roadmap
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- [x] Project scaffolding
+- [x] PIN authentication
+- [ ] Database setup
+- [ ] Meal planning CRUD
+- [ ] Recipe import (URL scraping)
+- [ ] Chores with points system
+- [ ] Grocery list generation
+- [ ] Mobile PWA
+- [ ] Calendar integration
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Contributing
 
-## Deploy on Vercel
+This is a personal project, but PRs are welcome!
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## License
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT
+
+---
+
+Built with ❤️ for busy families
