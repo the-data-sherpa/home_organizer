@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SpotlightCard } from "@/components/aceternity";
@@ -134,7 +135,7 @@ export default function SettingsPage() {
       {/* Header */}
       <header className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-4">
-          <a href="/" className="text-2xl hover:opacity-70 transition-opacity">←</a>
+          <Link href="/" className="text-2xl hover:opacity-70 transition-opacity">←</Link>
           <div>
             <h1 className="text-3xl font-bold text-white">⚙️ Settings</h1>
             <p className="text-slate-400 mt-1">Manage your family</p>
@@ -299,26 +300,26 @@ export default function SettingsPage() {
       {/* Bottom Nav */}
       <nav className="fixed bottom-0 left-0 right-0 bg-slate-900/95 backdrop-blur border-t border-slate-800 px-6 py-4">
         <div className="flex justify-around max-w-2xl mx-auto">
-          <a href="/" className="flex flex-col items-center gap-1 text-slate-400 hover:text-white transition-colors">
+          <Link href="/" className="flex flex-col items-center gap-1 text-slate-400 hover:text-white transition-colors">
             <span className="text-2xl">🏠</span>
             <span className="text-xs">Home</span>
-          </a>
-          <a href="/calendar" className="flex flex-col items-center gap-1 text-slate-400 hover:text-white transition-colors">
+          </Link>
+          <Link href="/calendar" className="flex flex-col items-center gap-1 text-slate-400 hover:text-white transition-colors">
             <span className="text-2xl">📅</span>
             <span className="text-xs">Calendar</span>
-          </a>
-          <a href="/chores" className="flex flex-col items-center gap-1 text-slate-400 hover:text-white transition-colors">
+          </Link>
+          <Link href="/chores" className="flex flex-col items-center gap-1 text-slate-400 hover:text-white transition-colors">
             <span className="text-2xl">✅</span>
             <span className="text-xs">Chores</span>
-          </a>
-          <a href="/meals" className="flex flex-col items-center gap-1 text-slate-400 hover:text-white transition-colors">
+          </Link>
+          <Link href="/meals" className="flex flex-col items-center gap-1 text-slate-400 hover:text-white transition-colors">
             <span className="text-2xl">🍽️</span>
             <span className="text-xs">Meals</span>
-          </a>
-          <a href="/settings" className="flex flex-col items-center gap-1 text-white">
+          </Link>
+          <Link href="/settings" className="flex flex-col items-center gap-1 text-white">
             <span className="text-2xl">⚙️</span>
             <span className="text-xs font-medium">Settings</span>
-          </a>
+          </Link>
         </div>
       </nav>
     </div>

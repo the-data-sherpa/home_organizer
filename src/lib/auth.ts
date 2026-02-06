@@ -20,7 +20,6 @@ export function verifyPin(pin: string): boolean {
 export async function createSession(): Promise<void> {
   const cookieStore = await cookies();
   const sessionToken = crypto.randomBytes(32).toString("hex");
-  const hashedToken = hashPin(sessionToken);
   
   cookieStore.set(SESSION_COOKIE_NAME, sessionToken, {
     httpOnly: true,
@@ -30,8 +29,7 @@ export async function createSession(): Promise<void> {
     path: "/",
   });
   
-  // In a real app, you'd store hashedToken in a database
-  // For now, we just set a simple session cookie
+  // Simple session validation via separate cookie
   cookieStore.set(`${SESSION_COOKIE_NAME}_valid`, "true", {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
