@@ -210,25 +210,25 @@ MealSuggestion
 
 ## MVP Milestones
 
-### Phase 1: Foundation
-- [ ] Project setup (Next.js, Tailwind, DB)
-- [ ] PIN authentication
-- [ ] Basic layout and navigation
-- [ ] Family member management
+### Phase 1: Foundation ✅
+- [x] Project setup (Next.js, Tailwind, DB)
+- [x] PIN authentication
+- [x] Basic layout and navigation
+- [x] Family member management
 
-### Phase 2: Meals
-- [ ] Recipe CRUD (manual entry)
-- [ ] Meal calendar
-- [ ] Recipe import (URL scraping)
-- [ ] Cooking mode (pin to screen)
-- [ ] Macro tracking
+### Phase 2: Meals ✅
+- [x] Recipe CRUD (manual entry)
+- [x] Meal calendar
+- [x] Recipe import (URL scraping)
+- [x] Cooking mode (pin to screen)
+- [x] Macro tracking
 
-### Phase 3: Chores
-- [ ] Chore CRUD
-- [ ] Weekly schedule view
-- [ ] Mark complete
-- [ ] Points system
-- [ ] Claimable chores
+### Phase 3: Chores ✅
+- [x] Chore CRUD
+- [x] Weekly schedule view
+- [x] Mark complete
+- [x] Points system
+- [x] Claimable chores
 
 ### Phase 4: Grocery
 - [ ] Auto-generate list from meals

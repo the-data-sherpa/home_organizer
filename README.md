@@ -72,27 +72,41 @@ Open [http://localhost:3000](http://localhost:3000)
 ```
 src/
 ├── app/
-│   ├── api/auth/        # Auth endpoints
-│   ├── login/           # PIN entry page
-│   ├── page.tsx         # Dashboard
-│   └── layout.tsx       # Root layout
+│   ├── api/
+│   │   ├── auth/login/     # PIN authentication
+│   │   ├── users/          # Family members CRUD
+│   │   ├── recipes/        # Recipes CRUD + import
+│   │   ├── meal-plans/     # Meal calendar
+│   │   └── chores/         # Chores CRUD + complete
+│   ├── login/              # PIN entry page
+│   ├── meals/              # Meal planning page
+│   ├── chores/             # Chores page
+│   ├── cook/[id]/          # Cooking mode
+│   ├── settings/           # Family management
+│   └── page.tsx            # Dashboard
 ├── components/
-│   ├── aceternity/      # Aceternity UI components
-│   └── ui/              # shadcn/ui components
+│   ├── aceternity/         # Aceternity UI (spotlight, bento, glow)
+│   └── ui/                 # shadcn/ui components
 ├── lib/
-│   ├── auth.ts          # Auth utilities
-│   └── utils.ts         # Helpers
-└── middleware.ts        # Route protection
+│   ├── auth.ts             # Auth utilities
+│   ├── db.ts               # Prisma client
+│   └── utils.ts            # Helpers
+├── middleware.ts           # Route protection
+└── prisma/
+    └── schema.prisma       # Database models
 ```
 
 ## Roadmap
 
 - [x] Project scaffolding
 - [x] PIN authentication
-- [ ] Database setup
-- [ ] Meal planning CRUD
-- [ ] Recipe import (URL scraping)
-- [ ] Chores with points system
+- [x] Database setup (Prisma + SQLite)
+- [x] Family member management
+- [x] Meal planning + calendar
+- [x] Recipe CRUD + URL import
+- [x] Cooking mode (pin to screen)
+- [x] Chores with points system
+- [x] Leaderboard + earnings
 - [ ] Grocery list generation
 - [ ] Mobile PWA
 - [ ] Calendar integration
