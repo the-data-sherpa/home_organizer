@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home Organizer — Meal Planning</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    .touch-target { min-height: 60px; }
+  </style>
+</head>
+<body class="bg-slate-900 text-white min-h-screen">
+  <!-- Header -->
+  <header class="bg-slate-800 border-b border-slate-700 px-6 py-4">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <button class="text-2xl">←</button>
+        <div>
+          <h1 class="text-2xl font-bold">🍽️ Meal Planning</h1>
+          <p class="text-slate-400">Week of Feb 3 - Feb 9</p>
+        </div>
+      </div>
+      <div class="flex gap-3">
+        <button class="bg-slate-700 hover:bg-slate-600 px-4 py-2 rounded-xl transition-colors">← Prev Week</button>
+        <button class="bg-slate-700 hover:bg-slate-600 px-4 py-2 rounded-xl transition-colors">Next Week →</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="p-6">
+    <!-- Week Overview -->
+    <div class="grid grid-cols-7 gap-3 mb-8">
+      <div class="bg-slate-800 rounded-2xl p-4 text-center border-2 border-slate-700">
+        <div class="text-slate-400 text-sm mb-1">Mon</div>
+        <div class="text-lg font-semibold mb-2">3</div>
+        <div class="text-2xl">🍝</div>
+        <div class="text-xs text-slate-400 mt-1">Spaghetti</div>
+      </div>
+      <div class="bg-slate-800 rounded-2xl p-4 text-center border-2 border-slate-700">
+        <div class="text-slate-400 text-sm mb-1">Tue</div>
+        <div class="text-lg font-semibold mb-2">4</div>
+        <div class="text-2xl">🌮</div>
+        <div class="text-xs text-slate-400 mt-1">Tacos</div>
+      </div>
+      <div class="bg-gradient-to-br from-orange-600 to-red-600 rounded-2xl p-4 text-center border-2 border-orange-500">
+        <div class="text-orange-200 text-sm mb-1">Wed</div>
+        <div class="text-lg font-semibold mb-2">5</div>
+        <div class="text-2xl">🍗</div>
+        <div class="text-xs text-orange-200 mt-1">Chicken</div>
+        <div class="text-[10px] text-orange-300 mt-1">TODAY</div>
+      </div>
+      <div class="bg-slate-800 rounded-2xl p-4 text-center border-2 border-slate-700">
+        <div class="text-slate-400 text-sm mb-1">Thu</div>
+        <div class="text-lg font-semibold mb-2">6</div>
+        <div class="text-2xl">🍕</div>
+        <div class="text-xs text-slate-400 mt-1">Pizza</div>
+      </div>
+      <div class="bg-slate-800 rounded-2xl p-4 text-center border-2 border-slate-700">
+        <div class="text-slate-400 text-sm mb-1">Fri</div>
+        <div class="text-lg font-semibold mb-2">7</div>
+        <div class="text-2xl">🐟</div>
+        <div class="text-xs text-slate-400 mt-1">Fish Fry</div>
+      </div>
+      <div class="bg-slate-800 rounded-2xl p-4 text-center border-2 border-slate-700">
+        <div class="text-slate-400 text-sm mb-1">Sat</div>
+        <div class="text-lg font-semibold mb-2">8</div>
+        <div class="text-2xl">🍔</div>
+        <div class="text-xs text-slate-400 mt-1">Burgers</div>
+      </div>
+      <div class="bg-slate-800 rounded-2xl p-4 text-center border-2 border-dashed border-slate-600 hover:border-slate-500 cursor-pointer">
+        <div class="text-slate-400 text-sm mb-1">Sun</div>
+        <div class="text-lg font-semibold mb-2">9</div>
+        <div class="text-2xl text-slate-600">+</div>
+        <div class="text-xs text-slate-500 mt-1">Add meal</div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-12 gap-6">
+      <!-- Left: Today's Meal Detail -->
+      <div class="col-span-7 space-y-6">
+        <section class="bg-slate-800 rounded-2xl p-6">
+          <div class="flex items-start justify-between mb-4">
+            <div>
+              <div class="text-slate-400 text-sm">Tonight's Dinner</div>
+              <h2 class="text-2xl font-bold">Honey Garlic Chicken 🍗</h2>
+            </div>
+            <button class="bg-slate-700 hover:bg-slate-600 px-4 py-2 rounded-xl transition-colors">
+              Change Meal
+            </button>
+          </div>
+          
+          <div class="grid grid-cols-3 gap-4 mb-6">
+            <div class="bg-slate-700/50 rounded-xl p-3 text-center">
+              <div class="text-2xl mb-1">⏱️</div>
+              <div class="text-sm text-slate-400">Prep Time</div>
+              <div class="font-semibold">15 min</div>
+            </div>
+            <div class="bg-slate-700/50 rounded-xl p-3 text-center">
+              <div class="text-2xl mb-1">🍳</div>
+              <div class="text-sm text-slate-400">Cook Time</div>
+              <div class="font-semibold">25 min</div>
+            </div>
+            <div class="bg-slate-700/50 rounded-xl p-3 text-center">
+              <div class="text-2xl mb-1">👨‍👩‍👧‍👦</div>
+              <div class="text-sm text-slate-400">Servings</div>
+              <div class="font-semibold">4</div>
+            </div>
+          </div>
+
+          <h3 class="font-semibold mb-3">Ingredients</h3>
+          <div class="grid grid-cols-2 gap-2">
+            <div class="flex items-center gap-2 bg-slate-700/30 rounded-lg p-2">
+              <span class="text-emerald-400">✓</span>
+              <span>4 chicken breasts</span>
+            </div>
+            <div class="flex items-center gap-2 bg-slate-700/30 rounded-lg p-2">
+              <span class="text-emerald-400">✓</span>
+              <span>1/3 cup honey</span>
+            </div>
+            <div class="flex items-center gap-2 bg-slate-700/30 rounded-lg p-2">
+              <span class="text-emerald-400">✓</span>
+              <span>4 cloves garlic</span>
+            </div>
+            <div class="flex items-center gap-2 bg-slate-700/30 rounded-lg p-2">
+              <span class="text-emerald-400">✓</span>
+              <span>3 tbsp soy sauce</span>
+            </div>
+            <div class="flex items-center gap-2 bg-yellow-500/20 rounded-lg p-2 border border-yellow-500/30">
+              <span class="text-yellow-400">!</span>
+              <span>Fresh broccoli</span>
+              <span class="text-yellow-400 text-xs ml-auto">Need</span>
+            </div>
+            <div class="flex items-center gap-2 bg-yellow-500/20 rounded-lg p-2 border border-yellow-500/30">
+              <span class="text-yellow-400">!</span>
+              <span>Jasmine rice</span>
+              <span class="text-yellow-400 text-xs ml-auto">Need</span>
+            </div>
+          </div>
+
+          <button class="w-full mt-4 bg-orange-600 hover:bg-orange-500 rounded-xl py-3 font-medium transition-colors touch-target">
+            📖 View Full Recipe
+          </button>
+        </section>
+      </div>
+
+      <!-- Right: Shopping Lists -->
+      <div class="col-span-5 space-y-6">
+        <section class="bg-gradient-to-br from-blue-900/50 to-cyan-900/50 border border-blue-700/50 rounded-2xl p-6">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-xl font-semibold">🛒 Smart Shopping Lists</h2>
+            <span class="bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-full text-sm font-medium">
+              Save $23.47
+            </span>
+          </div>
+          <p class="text-slate-400 text-sm mb-4">
+            Based on this week's meals, here's where to shop for the best deals:
+          </p>
+
+          <!-- Kroger -->
+          <div class="bg-slate-800/80 rounded-xl p-4 mb-3">
+            <div class="flex items-center justify-between mb-2">
+              <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center font-bold text-sm">K</div>
+                <span class="font-semibold">Kroger</span>
+              </div>
+              <span class="text-emerald-400 font-medium">$34.22</span>
+            </div>
+            <div class="text-slate-400 text-sm">8 items · Chicken on sale! · 2.3 mi</div>
+            <div class="flex flex-wrap gap-1 mt-2">
+              <span class="bg-slate-700 px-2 py-0.5 rounded text-xs">Chicken $8.99</span>
+              <span class="bg-slate-700 px-2 py-0.5 rounded text-xs">Broccoli $2.49</span>
+              <span class="bg-slate-700 px-2 py-0.5 rounded text-xs">+6 more</span>
+            </div>
+          </div>
+
+          <!-- Costco -->
+          <div class="bg-slate-800/80 rounded-xl p-4 mb-3">
+            <div class="flex items-center justify-between mb-2">
+              <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-red-700 rounded-lg flex items-center justify-center font-bold text-sm">C</div>
+                <span class="font-semibold">Costco</span>
+              </div>
+              <span class="text-emerald-400 font-medium">$28.99</span>
+            </div>
+            <div class="text-slate-400 text-sm">4 items · Bulk rice deal · 5.1 mi</div>
+            <div class="flex flex-wrap gap-1 mt-2">
+              <span class="bg-slate-700 px-2 py-0.5 rounded text-xs">Rice 25lb $15.99</span>
+              <span class="bg-slate-700 px-2 py-0.5 rounded text-xs">+3 more</span>
+            </div>
+          </div>
+
+          <!-- Aldi -->
+          <div class="bg-slate-800/80 rounded-xl p-4 mb-4">
+            <div class="flex items-center justify-between mb-2">
+              <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center font-bold text-sm">A</div>
+                <span class="font-semibold">Aldi</span>
+              </div>
+              <span class="text-emerald-400 font-medium">$12.47</span>
+            </div>
+            <div class="text-slate-400 text-sm">5 items · Best veggie prices · 1.8 mi</div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <button class="bg-blue-600 hover:bg-blue-500 rounded-xl py-3 font-medium transition-colors touch-target">
+              📋 View All Lists
+            </button>
+            <button class="bg-slate-700 hover:bg-slate-600 rounded-xl py-3 font-medium transition-colors touch-target">
+              🔄 Refresh Prices
+            </button>
+          </div>
+        </section>
+
+        <!-- Quick Add -->
+        <section class="bg-slate-800 rounded-2xl p-6">
+          <h2 class="text-lg font-semibold mb-4">Quick Add to List</h2>
+          <div class="flex gap-2 mb-4">
+            <input 
+              type="text" 
+              placeholder="Add item..." 
+              class="flex-1 bg-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+            <button class="bg-blue-600 hover:bg-blue-500 px-6 rounded-xl font-medium transition-colors">
+              Add
+            </button>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <button class="bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded-lg text-sm transition-colors">+ Milk</button>
+            <button class="bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded-lg text-sm transition-colors">+ Bread</button>
+            <button class="bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded-lg text-sm transition-colors">+ Eggs</button>
+            <button class="bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded-lg text-sm transition-colors">+ Bananas</button>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <!-- Bottom Nav -->
+  <nav class="fixed bottom-0 left-0 right-0 bg-slate-800 border-t border-slate-700 px-6 py-4">
+    <div class="flex justify-around">
+      <button class="flex flex-col items-center gap-1 text-slate-400 hover:text-white transition-colors">
+        <span class="text-2xl">🏠</span>
+        <span class="text-xs">Home</span>
+      </button>
+      <button class="flex flex-col items-center gap-1 text-slate-400 hover:text-white transition-colors">
+        <span class="text-2xl">📅</span>
+        <span class="text-xs">Calendar</span>
+      </button>
+      <button class="flex flex-col items-center gap-1 text-slate-400 hover:text-white transition-colors">
+        <span class="text-2xl">✅</span>
+        <span class="text-xs">Chores</span>
+      </button>
+      <button class="flex flex-col items-center gap-1 text-white">
+        <span class="text-2xl">🍽️</span>
+        <span class="text-xs font-medium">Meals</span>
+      </button>
+      <button class="flex flex-col items-center gap-1 text-slate-400 hover:text-white transition-colors">
+        <span class="text-2xl">🛒</span>
+        <span class="text-xs">Grocery</span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="h-24"></div>
+</body>
+</html>
