@@ -230,13 +230,13 @@ MealSuggestion
 - [x] Points system
 - [x] Claimable chores
 
-### Phase 4: Grocery
-- [ ] Auto-generate list from meals
-- [ ] Manual list management
-- [ ] Section organization
-- [ ] Mobile sync
-- [ ] Check-off functionality
-- [ ] Basic pantry tracking
+### Phase 4: Grocery ✅
+- [x] Auto-generate list from meals
+- [x] Manual list management
+- [x] Section organization
+- [ ] Mobile sync (PWA in Phase 5)
+- [x] Check-off functionality
+- [x] Basic pantry tracking
 
 ### Phase 5: Polish
 - [ ] PWA setup

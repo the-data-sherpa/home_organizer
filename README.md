@@ -107,7 +107,8 @@ src/
 - [x] Cooking mode (pin to screen)
 - [x] Chores with points system
 - [x] Leaderboard + earnings
-- [ ] Grocery list generation
+- [x] Grocery list + pantry tracking
+- [x] Generate list from meal plans
 - [ ] Mobile PWA
 - [ ] Calendar integration
 
