@@ -1,0 +1,130 @@
+// Home Organizer Database Schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Family Members
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  color         String    // Hex color for UI
+  emoji         String?   // Optional emoji avatar
+  pointsBalance Int       @default(0)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  assignedChores    Chore[]           @relation("AssignedChores")
+  completedChores   ChoreCompletion[]
+  mealSuggestions   MealSuggestion[]
+}
+
+// Recipes
+model Recipe {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  ingredients Json     // Array of {name, quantity, unit}
+  steps       Json     // Array of step strings
+  prepTime    Int?     // Minutes
+  cookTime    Int?     // Minutes
+  servings    Int?
+  macros      Json?    // {calories, protein, carbs, fat}
+  sourceUrl   String?  // If imported from web
+  imageUrl    String?
+  isFavorite  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  mealPlans       MealPlan[]
+  mealSuggestions MealSuggestion[]
+}
+
+// Weekly Meal Plan
+model MealPlan {
+  id        String   @id @default(cuid())
+  date      DateTime
+  mealType  String   // breakfast, lunch, dinner, snack
+  recipeId  String
+  recipe    Recipe   @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([date, mealType])
+}
+
+// Chores
+model Chore {
+  id           String   @id @default(cuid())
+  name         String
+  description  String?
+  points       Int      @default(1)
+  isClaimable  Boolean  @default(false) // Can anyone claim it?
+  isRecurring  Boolean  @default(true)
+  daysOfWeek   Json     // Array of days: [0,1,2,3,4,5,6] (0=Sunday)
+  assignedToId String?
+  assignedTo   User?    @relation("AssignedChores", fields: [assignedToId], references: [id], onDelete: SetNull)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Relations
+  completions ChoreCompletion[]
+}
+
+// Chore Completions (tracks when chores are done)
+model ChoreCompletion {
+  id          String   @id @default(cuid())
+  choreId     String
+  chore       Chore    @relation(fields: [choreId], references: [id], onDelete: Cascade)
+  completedBy String
+  user        User     @relation(fields: [completedBy], references: [id], onDelete: Cascade)
+  weekOf      DateTime // Start of the week (Sunday)
+  completedAt DateTime @default(now())
+  pointsEarned Int
+
+  @@unique([choreId, completedBy, weekOf])
+}
+
+// Grocery Items
+model GroceryItem {
+  id         String   @id @default(cuid())
+  name       String
+  quantity   Float?
+  unit       String?
+  section    String?  // Produce, Dairy, Meat, etc.
+  store      String?  // Preferred store
+  mealPlanId String?  // If linked to a meal plan
+  checked    Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+// Pantry Items
+model PantryItem {
+  id        String    @id @default(cuid())
+  name      String
+  quantity  Float?
+  unit      String?
+  expiresAt DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+// Kid Meal Suggestions
+model MealSuggestion {
+  id          String   @id @default(cuid())
+  suggestedBy String
+  user        User     @relation(fields: [suggestedBy], references: [id], onDelete: Cascade)
+  recipeId    String
+  recipe      Recipe   @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  status      String   @default("pending") // pending, approved, denied
+  suggestedAt DateTime @default(now())
+  respondedAt DateTime?
+}
