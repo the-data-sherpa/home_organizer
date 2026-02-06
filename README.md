@@ -19,7 +19,7 @@ A modern family command center designed for touchscreen displays. Manage meals, 
 - **Framework:** Next.js 16 (App Router)
 - **Styling:** Tailwind CSS v4 + shadcn/ui + Aceternity UI
 - **Language:** TypeScript
-- **Database:** Vercel Postgres (coming soon)
+- **Database:** SQLite (via Prisma)
 - **Auth:** 6-digit household PIN
 
 ## Getting Started

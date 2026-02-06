@@ -1,8 +1,8 @@
 # Home Organizer — Product Requirements Document
 
-**Version:** 0.1  
-**Date:** February 5, 2026  
-**Status:** Planning
+**Version:** 1.0
+**Date:** February 5, 2026
+**Status:** MVP Complete
 
 ---
 
@@ -22,8 +22,11 @@ A family command center designed for a touchscreen display, with mobile companio
 - Single shared PIN for the entire family
 - PIN hash stored in environment variable
 - Session cookie (30 days) keeps touchscreen logged in
-- Mobile requires PIN entry (with "remember device" option)
-- Rate limiting: 5 failed attempts = 5 minute lockout
+- Mobile requires PIN entry
+
+**Future Enhancements:**
+- Rate limiting on failed PIN attempts
+- "Remember device" option for mobile
 
 ---
 
@@ -47,12 +50,11 @@ A family command center designed for a touchscreen display, with mobile companio
 
 **Recipe Sources:**
 - Manual entry
-- URL import (using recipe-scrapers library)
+- URL import (using @extractus/article-extractor)
 - Favorites library (family go-to meals)
 
 **Nutrition Data:**
-- USDA FoodData API (free) for ingredient nutrition
-- Calculate meal totals from ingredients
+- Manual macro entry per recipe (calories, protein, carbs, fat)
 - Display macros on meal cards
 
 ---
@@ -104,7 +106,7 @@ A family command center designed for a touchscreen display, with mobile companio
 - Start empty, user builds over time
 - "Mark as bought" option adds to pantry
 - Manual add/remove items
-- Optional expiration dates (future)
+- Schema supports `expiresAt` field; expiration alerts UI is future work
 
 **Stores:**
 - User adds preferred stores in settings
@@ -156,41 +158,40 @@ A family command center designed for a touchscreen display, with mobile companio
 ## Technical Architecture
 
 **Stack:**
-- **Framework:** Next.js 15 (App Router)
-- **Styling:** Tailwind CSS
-- **Database:** PostgreSQL (Vercel Postgres or Supabase)
-- **Hosting:** Vercel
+- **Framework:** Next.js 16 (App Router)
+- **Styling:** Tailwind CSS, Framer Motion, shadcn/ui, Aceternity UI
+- **Database:** SQLite (via Prisma)
 - **Auth:** Custom PIN-based (middleware)
-- **APIs:** 
-  - USDA FoodData (nutrition)
-  - Recipe scrapers (imports)
+- **APIs:**
+  - @extractus/article-extractor (recipe imports)
+  - wttr.in (weather widget)
 
 **Data Models:**
 
 ```
 User (family member)
-- id, name, color, pin (optional future), points_balance
+- id, name, color, emoji (optional), pointsBalance (default 0)
 
 Recipe
-- id, name, ingredients[], steps[], prep_time, cook_time, servings, macros{}, source_url
+- id, name, description (optional), ingredients[], steps[], prepTime, cookTime, servings, macros{}, sourceUrl, imageUrl, isFavorite (default false)
 
 MealPlan
-- id, date, meal_type (breakfast/lunch/dinner), recipe_id
+- id, date, mealType (breakfast/lunch/dinner/snack), recipeId
 
 Chore
-- id, name, assigned_to, days[], points, is_claimable, is_recurring
+- id, name, description (optional), points, isClaimable, isRecurring, daysOfWeek[], assignedToId
 
 ChoreCompletion
-- id, chore_id, completed_by, completed_at, week_of
+- id, choreId, completedBy, completedAt, weekOf, pointsEarned
 
 GroceryItem
-- id, name, quantity, unit, section, meal_plan_id (nullable), checked, store
+- id, name, quantity (Float, nullable), unit, section, store, mealPlanId (nullable), checked
 
 PantryItem
-- id, name, quantity, unit, expires_at (nullable)
+- id, name, quantity (Float, nullable), unit, expiresAt (nullable)
 
 MealSuggestion
-- id, suggested_by, recipe_id, status (pending/approved/denied), suggested_at
+- id, suggestedBy, recipeId, status (pending/approved/denied), suggestedAt, respondedAt
 ```
 
 ---
@@ -234,14 +235,13 @@ MealSuggestion
 - [x] Auto-generate list from meals
 - [x] Manual list management
 - [x] Section organization
-- [ ] Mobile sync (PWA in Phase 5)
+- [x] Mobile sync (PWA in Phase 5)
 - [x] Check-off functionality
 - [x] Basic pantry tracking
 
 ### Phase 5: Polish ✅
 - [x] PWA setup (manifest, meta tags)
 - [x] Weather widget (wttr.in integration)
-- [ ] Kid meal suggestions (future)
 - [x] Dashboard refinements (real data)
 - [x] Mobile responsive polish
 
@@ -249,12 +249,19 @@ MealSuggestion
 
 ## Future Enhancements (Post-MVP)
 
+- [ ] Kid meal suggestions (schema ready, needs UI/API)
+- [ ] Rate limiting on PIN auth
+- [ ] Remember device option for mobile
+- [ ] Store management in settings
+- [ ] Pantry expiration alerts UI
+- [ ] Calendar feature (day/week/month views)
+- [ ] USDA FoodData API integration for auto-nutrition
+- [ ] Cooking mode timers
 - [ ] Price comparison (when data sources available)
 - [ ] Google Calendar sync
 - [ ] Voice commands
 - [ ] Per-user PINs
 - [ ] Chore streak bonuses
-- [ ] Pantry expiration alerts
 - [ ] Kid reward redemption store
 - [ ] Photo slideshow (idle mode)
 - [ ] Package tracking
@@ -264,10 +271,8 @@ MealSuggestion
 
 ## Open Questions
 
-1. ~~Price comparison data source~~ → Deferred to future
-2. Recipe database licensing (if we want built-in suggestions)
-3. Offline support needed?
-4. Specific touchscreen hardware recommendation?
+1. Specific touchscreen hardware recommendation?
+2. Offline support: PWA manifest is set up; no service worker for offline caching yet — worth adding?
 
 ---
 
