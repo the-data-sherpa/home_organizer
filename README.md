@@ -109,8 +109,9 @@ src/
 - [x] Leaderboard + earnings
 - [x] Grocery list + pantry tracking
 - [x] Generate list from meal plans
-- [ ] Mobile PWA
-- [ ] Calendar integration
+- [x] PWA setup (installable)
+- [x] Weather widget
+- [ ] Calendar integration (future)
 
 ## Contributing
 

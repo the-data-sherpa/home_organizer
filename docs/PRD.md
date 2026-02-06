@@ -238,12 +238,12 @@ MealSuggestion
 - [x] Check-off functionality
 - [x] Basic pantry tracking
 
-### Phase 5: Polish
-- [ ] PWA setup
-- [ ] Weather widget
-- [ ] Kid meal suggestions
-- [ ] Dashboard refinements
-- [ ] Mobile responsive polish
+### Phase 5: Polish ✅
+- [x] PWA setup (manifest, meta tags)
+- [x] Weather widget (wttr.in integration)
+- [ ] Kid meal suggestions (future)
+- [x] Dashboard refinements (real data)
+- [x] Mobile responsive polish
 
 ---
 

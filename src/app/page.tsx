@@ -46,16 +46,25 @@ interface GroceryItem {
   section: string | null;
 }
 
+interface Weather {
+  temp: number;
+  condition: string;
+  icon: string;
+  location: string;
+}
+
 export default function Home() {
   const [users, setUsers] = useState<User[]>([]);
   const [todaysMeal, setTodaysMeal] = useState<MealPlan | null>(null);
   const [todaysChores, setTodaysChores] = useState<Chore[]>([]);
   const [groceryItems, setGroceryItems] = useState<GroceryItem[]>([]);
+  const [weather, setWeather] = useState<Weather | null>(null);
   const [loading, setLoading] = useState(true);
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
     loadData();
+    loadWeather();
     const timer = setInterval(() => setCurrentTime(new Date()), 60000);
     return () => clearInterval(timer);
   }, []);
@@ -92,6 +101,17 @@ export default function Home() {
       console.error("Failed to load data:", error);
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function loadWeather() {
+    try {
+      const res = await fetch("/api/weather");
+      if (res.ok) {
+        setWeather(await res.json());
+      }
+    } catch (error) {
+      console.error("Failed to load weather:", error);
     }
   }
 
@@ -137,6 +157,12 @@ export default function Home() {
         </div>
         <div className="text-right">
           <div className="text-5xl font-bold text-white">{timeString}</div>
+          {weather && (
+            <div className="text-slate-400 flex items-center justify-end gap-2 mt-1">
+              <span className="text-xl">{weather.icon}</span>
+              <span>{weather.temp}°F · {weather.condition}</span>
+            </div>
+          )}
         </div>
       </header>
 
