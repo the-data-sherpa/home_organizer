@@ -1,0 +1,30 @@
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: hearthboard
+      POSTGRES_PASSWORD: hearthboard
+      POSTGRES_DB: hearthboard
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hearthboard"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgresql://hearthboard:hearthboard@db:5432/hearthboard
+      FAMILY_PIN_HASH: ${FAMILY_PIN_HASH}
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:
