@@ -4,6 +4,7 @@ import {
   parseNumber,
   extractImageUrl,
   parseInstructions,
+  hasType,
 } from "../route";
 
 describe("parseDuration", () => {
@@ -72,6 +73,28 @@ describe("extractImageUrl", () => {
   test("returns null for null/undefined", () => {
     expect(extractImageUrl(null)).toBeNull();
     expect(extractImageUrl(undefined)).toBeNull();
+  });
+});
+
+describe("hasType", () => {
+  test("matches string @type", () => {
+    expect(hasType({ "@type": "Recipe" }, "Recipe")).toBe(true);
+  });
+
+  test("rejects non-matching string @type", () => {
+    expect(hasType({ "@type": "Article" }, "Recipe")).toBe(false);
+  });
+
+  test("matches when @type is an array containing the type", () => {
+    expect(hasType({ "@type": ["Recipe", "NewsArticle"] }, "Recipe")).toBe(true);
+  });
+
+  test("rejects when @type array does not contain the type", () => {
+    expect(hasType({ "@type": ["Article", "NewsArticle"] }, "Recipe")).toBe(false);
+  });
+
+  test("returns false for undefined @type", () => {
+    expect(hasType({}, "Recipe")).toBe(false);
   });
 });
 

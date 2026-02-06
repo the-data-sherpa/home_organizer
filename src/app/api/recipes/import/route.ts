@@ -1,8 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 
+/** Checks if a JSON-LD @type field (string or array) includes the given type. */
+export function hasType(item: { "@type"?: string | string[] }, type: string): boolean {
+  if (Array.isArray(item["@type"])) return item["@type"].includes(type);
+  return item["@type"] === type;
+}
+
 interface SchemaRecipe {
-  "@type"?: string;
+  "@type"?: string | string[];
   name?: string;
   description?: string;
   image?: string | string[] | { url: string }[];
@@ -74,7 +80,10 @@ export async function POST(request: NextRequest) {
     // Fetch the page
     const response = await fetch(url, {
       headers: {
-        "User-Agent": "Mozilla/5.0 (compatible; HomeOrganizer/1.0)",
+        "User-Agent":
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.5",
       },
     });
 
@@ -112,24 +121,24 @@ export async function POST(request: NextRequest) {
         // Handle @graph format
         if (parsed["@graph"]) {
           const recipe = parsed["@graph"].find(
-            (item: SchemaRecipe) => item["@type"] === "Recipe"
+            (item: SchemaRecipe) => hasType(item, "Recipe")
           );
           if (recipe) {
             recipeData = recipe;
             break;
           }
         }
-        
-        // Direct Recipe type
-        if (parsed["@type"] === "Recipe") {
+
+        // Direct Recipe type (string or array, e.g. ["Recipe", "NewsArticle"])
+        if (hasType(parsed, "Recipe")) {
           recipeData = parsed;
           break;
         }
-        
+
         // Array format
         if (Array.isArray(parsed)) {
           const recipe = parsed.find(
-            (item: SchemaRecipe) => item["@type"] === "Recipe"
+            (item: SchemaRecipe) => hasType(item, "Recipe")
           );
           if (recipe) {
             recipeData = recipe;
