@@ -1,7 +1,7 @@
 {
-  "name": "Home Organizer",
-  "short_name": "Home",
-  "description": "Family command center for meals, chores, and more",
+  "name": "Hearthboard",
+  "short_name": "Hearth",
+  "description": "Your family's digital hearth — meals, chores, and schedules in one place",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#020617",

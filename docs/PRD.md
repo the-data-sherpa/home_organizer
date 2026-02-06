@@ -1,4 +1,4 @@
-# Home Organizer — Product Requirements Document
+# Hearthboard — Product Requirements Document
 
 **Version:** 1.0
 **Date:** February 5, 2026

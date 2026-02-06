@@ -13,14 +13,14 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Home Organizer",
-  description: "Family command center for meals, chores, and more",
+  title: "Hearthboard",
+  description: "Your family's digital hearth — meals, chores, and schedules in one place",
   manifest: "/manifest.json",
   themeColor: "#020617",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "Home Organizer",
+    title: "Hearthboard",
   },
   viewport: {
     width: "device-width",

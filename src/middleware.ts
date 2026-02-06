@@ -22,7 +22,7 @@ export function middleware(request: NextRequest) {
   }
   
   // Check for valid session cookie
-  const sessionValid = request.cookies.get("home_organizer_session_valid");
+  const sessionValid = request.cookies.get("hearthboard_session_valid");
   
   if (!sessionValid || sessionValid.value !== "true") {
     // Redirect to login

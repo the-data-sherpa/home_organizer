@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import crypto from "crypto";
 
-const SESSION_COOKIE_NAME = "home_organizer_session";
+const SESSION_COOKIE_NAME = "hearthboard_session";
 const SESSION_DURATION_DAYS = 30;
 
 export function hashPin(pin: string): string {

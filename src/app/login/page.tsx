@@ -86,7 +86,7 @@ export default function LoginPage() {
       >
         <div className="text-center mb-8">
           <div className="text-6xl mb-4">🏠</div>
-          <h1 className="text-2xl font-bold text-white">Home Organizer</h1>
+          <h1 className="text-2xl font-bold text-white">Hearthboard</h1>
           <p className="text-slate-400 mt-2">Enter your family PIN</p>
         </div>
 
