@@ -8,7 +8,11 @@
     "start": "next start",
     "lint": "eslint",
     "test": "bun test",
-    "test:watch": "bun test --watch"
+    "test:watch": "bun test --watch",
+    "postinstall": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:push": "prisma db push",
+    "db:studio": "prisma studio"
   },
   "dependencies": {
     "@extractus/article-extractor": "^8.0.20",
