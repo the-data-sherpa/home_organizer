@@ -98,7 +98,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-function categorizeIngredient(name: string): string {
+export function categorizeIngredient(name: string): string {
   const lower = name.toLowerCase();
 
   // Produce

@@ -14,6 +14,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { getWeekDates, formatDate } from "@/lib/helpers";
 
 interface Ingredient {
   name: string;
@@ -52,23 +53,6 @@ interface MealPlan {
 
 const MEAL_TYPES = ["breakfast", "lunch", "dinner", "snack"];
 const DAYS_OF_WEEK = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
-function getWeekDates(offset: number = 0): Date[] {
-  const today = new Date();
-  const currentDay = today.getDay();
-  const startOfWeek = new Date(today);
-  startOfWeek.setDate(today.getDate() - currentDay + offset * 7);
-
-  return Array.from({ length: 7 }, (_, i) => {
-    const date = new Date(startOfWeek);
-    date.setDate(startOfWeek.getDate() + i);
-    return date;
-  });
-}
-
-function formatDate(date: Date): string {
-  return date.toISOString().split("T")[0];
-}
 
 export default function MealsPage() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);

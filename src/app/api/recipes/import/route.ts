@@ -19,7 +19,7 @@ interface SchemaRecipe {
   };
 }
 
-function parseDuration(iso8601: string | undefined): number | null {
+export function parseDuration(iso8601: string | undefined): number | null {
   if (!iso8601) return null;
   // Parse ISO 8601 duration (e.g., PT30M, PT1H30M)
   const match = iso8601.match(/PT(?:(\d+)H)?(?:(\d+)M)?/);
@@ -29,13 +29,13 @@ function parseDuration(iso8601: string | undefined): number | null {
   return hours * 60 + minutes;
 }
 
-function parseNumber(value: string | undefined): number {
+export function parseNumber(value: string | undefined): number {
   if (!value) return 0;
   const match = value.match(/[\d.]+/);
   return match ? parseFloat(match[0]) : 0;
 }
 
-function extractImageUrl(image: SchemaRecipe["image"]): string | null {
+export function extractImageUrl(image: SchemaRecipe["image"]): string | null {
   if (!image) return null;
   if (typeof image === "string") return image;
   if (Array.isArray(image)) {
@@ -46,7 +46,7 @@ function extractImageUrl(image: SchemaRecipe["image"]): string | null {
   return null;
 }
 
-function parseInstructions(instructions: SchemaRecipe["recipeInstructions"]): string[] {
+export function parseInstructions(instructions: SchemaRecipe["recipeInstructions"]): string[] {
   if (!instructions) return [];
   if (Array.isArray(instructions)) {
     return instructions.map((item) => {

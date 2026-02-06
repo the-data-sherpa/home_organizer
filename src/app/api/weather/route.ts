@@ -56,7 +56,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
-function getWeatherIcon(code: string): string {
+export function getWeatherIcon(code: string): string {
   const codeNum = parseInt(code);
   
   // Weather codes from wttr.in

@@ -14,6 +14,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { getSectionEmoji } from "@/lib/helpers";
 
 interface GroceryItem {
   id: string;
@@ -480,23 +481,3 @@ export default function GroceryPage() {
   );
 }
 
-function getSectionEmoji(section: string): string {
-  switch (section) {
-    case "Produce":
-      return "🥬";
-    case "Meat":
-      return "🥩";
-    case "Dairy":
-      return "🧀";
-    case "Bakery":
-      return "🍞";
-    case "Frozen":
-      return "🧊";
-    case "Canned":
-      return "🥫";
-    case "Pantry":
-      return "🫙";
-    default:
-      return "📦";
-  }
-}

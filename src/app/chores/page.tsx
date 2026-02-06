@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { SpotlightCard, GlowingCard } from "@/components/aceternity";
+import { calculateEarnings } from "@/lib/helpers";
 import {
   Dialog,
   DialogContent,
@@ -199,13 +200,6 @@ export default function ChoresPage() {
     (sum, c) => sum + c.completions.length,
     0
   );
-
-  // Calculate earnings: 10 points = $1 base, each additional 10 points = +$1
-  function calculateEarnings(points: number): string {
-    if (points < 10) return "$0.00";
-    const dollars = Math.floor(points / 10);
-    return `$${dollars}.00`;
-  }
 
   return (
     <div className="min-h-screen bg-slate-950 p-6 pb-28">

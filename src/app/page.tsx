@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { SpotlightCard, BentoGrid, BentoGridItem, GlowingCard } from "@/components/aceternity";
+import { greeting as getGreeting } from "@/lib/helpers";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
@@ -115,12 +116,7 @@ export default function Home() {
     }
   }
 
-  const greeting = () => {
-    const hour = currentTime.getHours();
-    if (hour < 12) return "Good Morning";
-    if (hour < 17) return "Good Afternoon";
-    return "Good Evening";
-  };
+  const greetingText = getGreeting(currentTime.getHours());
 
   const timeString = currentTime.toLocaleTimeString("en-US", {
     hour: "numeric",
@@ -151,7 +147,7 @@ export default function Home() {
       <header className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-3xl font-bold text-white">
-            {greeting()}! 👋
+            {greetingText}! 👋
           </h1>
           <p className="text-slate-400 mt-1">{dateString}</p>
         </div>

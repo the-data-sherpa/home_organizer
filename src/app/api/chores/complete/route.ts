@@ -1,14 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
-
-function getStartOfWeek(): Date {
-  const now = new Date();
-  const day = now.getDay();
-  const diff = now.getDate() - day;
-  const startOfWeek = new Date(now.setDate(diff));
-  startOfWeek.setHours(0, 0, 0, 0);
-  return startOfWeek;
-}
+import { getStartOfWeek } from "@/lib/helpers";
 
 // POST /api/chores/complete - Mark a chore as complete
 export async function POST(request: NextRequest) {
