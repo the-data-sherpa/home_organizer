@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -16,18 +16,19 @@ export const metadata: Metadata = {
   title: "Hearthboard",
   description: "Your family's digital hearth — meals, chores, and schedules in one place",
   manifest: "/manifest.json",
-  themeColor: "#020617",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
     title: "Hearthboard",
   },
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 1,
-    userScalable: false,
-  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#020617",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 };
 
 export default function RootLayout({
