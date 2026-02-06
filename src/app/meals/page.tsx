@@ -76,6 +76,9 @@ export default function MealsPage() {
   const [weekOffset, setWeekOffset] = useState(0);
   const [loading, setLoading] = useState(true);
   const [recipeDialogOpen, setRecipeDialogOpen] = useState(false);
+  const [importDialogOpen, setImportDialogOpen] = useState(false);
+  const [importUrl, setImportUrl] = useState("");
+  const [importLoading, setImportLoading] = useState(false);
   const [mealDialogOpen, setMealDialogOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedMealType, setSelectedMealType] = useState<string>("dinner");
@@ -201,6 +204,31 @@ export default function MealsPage() {
       }
     } catch (error) {
       console.error("Failed to delete recipe:", error);
+    }
+  }
+
+  async function handleImportRecipe() {
+    if (!importUrl) return;
+    setImportLoading(true);
+    try {
+      const res = await fetch("/api/recipes/import", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: importUrl }),
+      });
+      if (res.ok) {
+        fetchRecipes();
+        setImportDialogOpen(false);
+        setImportUrl("");
+      } else {
+        const data = await res.json();
+        alert(data.error || "Failed to import recipe");
+      }
+    } catch (error) {
+      console.error("Failed to import recipe:", error);
+      alert("Failed to import recipe");
+    } finally {
+      setImportLoading(false);
     }
   }
 
@@ -416,15 +444,55 @@ export default function MealsPage() {
         <TabsContent value="recipes">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-xl font-semibold">Your Recipes</h2>
-            <Dialog open={recipeDialogOpen} onOpenChange={setRecipeDialogOpen}>
-              <DialogTrigger asChild>
-                <Button
-                  onClick={() => openRecipeDialog()}
-                  className="bg-blue-600 hover:bg-blue-500"
-                >
-                  + Add Recipe
-                </Button>
-              </DialogTrigger>
+            <div className="flex gap-2">
+              <Dialog open={importDialogOpen} onOpenChange={setImportDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button variant="outline">
+                    🔗 Import from URL
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="bg-slate-900 border-slate-700">
+                  <DialogHeader>
+                    <DialogTitle>Import Recipe from URL</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4 mt-4">
+                    <p className="text-sm text-slate-400">
+                      Paste a recipe URL from AllRecipes, Food Network, Tasty, or most recipe sites.
+                    </p>
+                    <Input
+                      value={importUrl}
+                      onChange={(e) => setImportUrl(e.target.value)}
+                      placeholder="https://www.allrecipes.com/recipe/..."
+                      className="bg-slate-800 border-slate-700"
+                    />
+                    <div className="flex gap-3">
+                      <Button
+                        onClick={handleImportRecipe}
+                        disabled={!importUrl || importLoading}
+                        className="flex-1 bg-blue-600 hover:bg-blue-500"
+                      >
+                        {importLoading ? "Importing..." : "Import Recipe"}
+                      </Button>
+                      <Button
+                        onClick={() => setImportDialogOpen(false)}
+                        variant="outline"
+                        className="flex-1"
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
+              <Dialog open={recipeDialogOpen} onOpenChange={setRecipeDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button
+                    onClick={() => openRecipeDialog()}
+                    className="bg-blue-600 hover:bg-blue-500"
+                  >
+                    + Add Recipe
+                  </Button>
+                </DialogTrigger>
               <DialogContent className="bg-slate-900 border-slate-700 max-w-2xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                   <DialogTitle>
@@ -590,6 +658,7 @@ export default function MealsPage() {
                 </div>
               </DialogContent>
             </Dialog>
+            </div>
           </div>
 
           {recipes.length === 0 ? (
@@ -639,6 +708,16 @@ export default function MealsPage() {
                     </div>
                   )}
                   <div className="flex gap-2">
+                    {recipe.steps.length > 0 && (
+                      <Link href={`/cook/${recipe.id}`}>
+                        <Button
+                          size="sm"
+                          className="bg-emerald-600 hover:bg-emerald-500"
+                        >
+                          👨‍🍳 Cook
+                        </Button>
+                      </Link>
+                    )}
                     <Button
                       variant="outline"
                       size="sm"
