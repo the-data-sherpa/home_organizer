@@ -10,15 +10,26 @@ describe("GET /api/chores", () => {
 
   test("returns chores list", async () => {
     const chores = [
-      { id: "1", name: "Dishes", points: 3, completions: [] },
-      { id: "2", name: "Vacuum", points: 5, completions: [] },
+      { id: "1", name: "Dishes", points: 3, assignments: [], completions: [] },
+      { id: "2", name: "Vacuum", points: 5, assignments: [], completions: [] },
     ];
     mockPrisma.chore.findMany.mockResolvedValueOnce(chores);
 
-    const res = await GET();
+    const req = createMockRequest("GET");
+    const res = await GET(req);
     expect(res.status).toBe(200);
     const body = await res.json();
     expect(body).toHaveLength(2);
+  });
+
+  test("passes weekOffset to query", async () => {
+    mockPrisma.chore.findMany.mockResolvedValueOnce([]);
+
+    const req = createMockRequest("GET", undefined, {
+      searchParams: { weekOffset: "-1" },
+    });
+    const res = await GET(req);
+    expect(res.status).toBe(200);
   });
 });
 
@@ -33,13 +44,14 @@ describe("POST /api/chores", () => {
     expect(res.status).toBe(400);
   });
 
-  test("returns 201 and creates chore", async () => {
+  test("returns 201 and creates chore with defaults", async () => {
     const chore = {
       id: "1",
       name: "Dishes",
       points: 3,
       isClaimable: false,
       daysOfWeek: [0, 1, 2, 3, 4, 5, 6],
+      assignments: [],
     };
     mockPrisma.chore.create.mockResolvedValueOnce(chore);
 
@@ -57,6 +69,7 @@ describe("POST /api/chores", () => {
       points: 1,
       isClaimable: false,
       daysOfWeek: [0, 1, 2, 3, 4, 5, 6],
+      assignments: [],
     };
     mockPrisma.chore.create.mockResolvedValueOnce(chore);
 
@@ -65,22 +78,26 @@ describe("POST /api/chores", () => {
     expect(res.status).toBe(201);
   });
 
-  test("returns 201 with assignedToId", async () => {
+  test("returns 201 with assignedUserIds", async () => {
     const chore = {
       id: "3",
       name: "Laundry",
       points: 5,
-      assignedToId: "user1",
-      assignedTo: { id: "user1", name: "Alice" },
+      assignments: [
+        { userId: "user1", user: { id: "user1", name: "Alice" } },
+        { userId: "user2", user: { id: "user2", name: "Bob" } },
+      ],
     };
     mockPrisma.chore.create.mockResolvedValueOnce(chore);
 
     const req = createMockRequest("POST", {
       name: "Laundry",
       points: 5,
-      assignedToId: "user1",
+      assignedUserIds: ["user1", "user2"],
     });
     const res = await POST(req);
     expect(res.status).toBe(201);
+    const body = await res.json();
+    expect(body.assignments).toHaveLength(2);
   });
 });

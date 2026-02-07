@@ -21,6 +21,7 @@ function createModelMock() {
 const mockPrisma = {
   user: createModelMock(),
   chore: createModelMock(),
+  choreAssignment: createModelMock(),
   choreCompletion: createModelMock(),
   recipe: createModelMock(),
   mealPlan: createModelMock(),

@@ -20,7 +20,7 @@ model User {
   updatedAt     DateTime  @updatedAt
 
   // Relations
-  assignedChores    Chore[]           @relation("AssignedChores")
+  choreAssignments  ChoreAssignment[] @relation("ChoreAssignments")
   completedChores   ChoreCompletion[]
   mealSuggestions   MealSuggestion[]
 }
@@ -69,27 +69,38 @@ model Chore {
   isClaimable  Boolean  @default(false) // Can anyone claim it?
   isRecurring  Boolean  @default(true)
   daysOfWeek   Json     // Array of days: [0,1,2,3,4,5,6] (0=Sunday)
-  assignedToId String?
-  assignedTo   User?    @relation("AssignedChores", fields: [assignedToId], references: [id], onDelete: SetNull)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
   // Relations
+  assignments ChoreAssignment[]
   completions ChoreCompletion[]
 }
 
-// Chore Completions (tracks when chores are done)
-model ChoreCompletion {
-  id          String   @id @default(cuid())
-  choreId     String
-  chore       Chore    @relation(fields: [choreId], references: [id], onDelete: Cascade)
-  completedBy String
-  user        User     @relation(fields: [completedBy], references: [id], onDelete: Cascade)
-  weekOf      DateTime // Start of the week (Sunday)
-  completedAt DateTime @default(now())
-  pointsEarned Int
+// Many-to-many: which users are assigned to which chores
+model ChoreAssignment {
+  id        String   @id @default(cuid())
+  choreId   String
+  chore     Chore    @relation(fields: [choreId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation("ChoreAssignments", fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
 
-  @@unique([choreId, completedBy, weekOf])
+  @@unique([choreId, userId])
+}
+
+// Chore Completions (tracks when chores are done, per-day)
+model ChoreCompletion {
+  id             String   @id @default(cuid())
+  choreId        String
+  chore          Chore    @relation(fields: [choreId], references: [id], onDelete: Cascade)
+  completedBy    String
+  user           User     @relation(fields: [completedBy], references: [id], onDelete: Cascade)
+  completionDate DateTime // The specific date (midnight) the chore was completed for
+  completedAt    DateTime @default(now())
+  pointsEarned   Int
+
+  @@unique([choreId, completedBy, completionDate])
 }
 
 // Grocery Items

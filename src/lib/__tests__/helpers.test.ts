@@ -6,6 +6,9 @@ import {
   formatDate,
   getSectionEmoji,
   getStartOfWeek,
+  startOfDay,
+  endOfDay,
+  canUserCompleteChore,
 } from "@/lib/helpers";
 
 describe("greeting", () => {
@@ -138,5 +141,83 @@ describe("getStartOfWeek", () => {
     expect(start.getMinutes()).toBe(0);
     expect(start.getSeconds()).toBe(0);
     expect(start.getMilliseconds()).toBe(0);
+  });
+});
+
+describe("startOfDay", () => {
+  test("sets time to midnight", () => {
+    const date = new Date("2024-06-15T14:30:00");
+    const result = startOfDay(date);
+    expect(result.getHours()).toBe(0);
+    expect(result.getMinutes()).toBe(0);
+    expect(result.getSeconds()).toBe(0);
+    expect(result.getMilliseconds()).toBe(0);
+  });
+
+  test("preserves the date", () => {
+    const date = new Date("2024-06-15T14:30:00");
+    const result = startOfDay(date);
+    expect(result.getFullYear()).toBe(2024);
+    expect(result.getMonth()).toBe(5);
+    expect(result.getDate()).toBe(15);
+  });
+
+  test("does not mutate original date", () => {
+    const date = new Date("2024-06-15T14:30:00");
+    const original = date.getTime();
+    startOfDay(date);
+    expect(date.getTime()).toBe(original);
+  });
+});
+
+describe("endOfDay", () => {
+  test("sets time to 23:59:59.999", () => {
+    const date = new Date("2024-06-15T14:30:00");
+    const result = endOfDay(date);
+    expect(result.getHours()).toBe(23);
+    expect(result.getMinutes()).toBe(59);
+    expect(result.getSeconds()).toBe(59);
+    expect(result.getMilliseconds()).toBe(999);
+  });
+
+  test("preserves the date", () => {
+    const date = new Date("2024-06-15T14:30:00");
+    const result = endOfDay(date);
+    expect(result.getFullYear()).toBe(2024);
+    expect(result.getMonth()).toBe(5);
+    expect(result.getDate()).toBe(15);
+  });
+
+  test("does not mutate original date", () => {
+    const date = new Date("2024-06-15T14:30:00");
+    const original = date.getTime();
+    endOfDay(date);
+    expect(date.getTime()).toBe(original);
+  });
+});
+
+describe("canUserCompleteChore", () => {
+  test("allows assigned user", () => {
+    const assignments = [{ userId: "user1" }, { userId: "user2" }];
+    expect(canUserCompleteChore(assignments, "user1", false)).toBe(true);
+  });
+
+  test("rejects unassigned user", () => {
+    const assignments = [{ userId: "user1" }];
+    expect(canUserCompleteChore(assignments, "user2", false)).toBe(false);
+  });
+
+  test("allows any user when claimable", () => {
+    const assignments: { userId: string }[] = [];
+    expect(canUserCompleteChore(assignments, "user2", true)).toBe(true);
+  });
+
+  test("allows any user when claimable even with assignments", () => {
+    const assignments = [{ userId: "user1" }];
+    expect(canUserCompleteChore(assignments, "user2", true)).toBe(true);
+  });
+
+  test("rejects when no assignments and not claimable", () => {
+    expect(canUserCompleteChore([], "user1", false)).toBe(false);
   });
 });

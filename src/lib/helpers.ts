@@ -62,3 +62,27 @@ export function getStartOfWeek(): Date {
   startOfWeek.setHours(0, 0, 0, 0);
   return startOfWeek;
 }
+
+/** Returns midnight (00:00:00.000) of the given date. */
+export function startOfDay(date: Date): Date {
+  const d = new Date(date);
+  d.setHours(0, 0, 0, 0);
+  return d;
+}
+
+/** Returns end of day (23:59:59.999) of the given date. */
+export function endOfDay(date: Date): Date {
+  const d = new Date(date);
+  d.setHours(23, 59, 59, 999);
+  return d;
+}
+
+/** Checks whether a user is authorized to complete a chore. */
+export function canUserCompleteChore(
+  assignments: { userId: string }[],
+  userId: string,
+  isClaimable: boolean,
+): boolean {
+  if (isClaimable) return true;
+  return assignments.some((a) => a.userId === userId);
+}

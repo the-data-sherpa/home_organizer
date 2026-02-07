@@ -6,18 +6,32 @@ import { POST, DELETE } from "../route";
 describe("POST /api/chores/complete", () => {
   beforeEach(() => {
     mockPrisma.chore.findUnique.mockReset();
-    mockPrisma.choreCompletion.upsert.mockReset();
+    mockPrisma.choreCompletion.findUnique.mockReset();
+    mockPrisma.choreCompletion.create.mockReset();
     mockPrisma.user.update.mockReset();
+    mockPrisma.$transaction.mockReset();
+    mockPrisma.$transaction.mockImplementation((args: unknown) => {
+      if (typeof args === "function")
+        return (args as (tx: typeof mockPrisma) => Promise<unknown>)(mockPrisma);
+      if (Array.isArray(args)) return Promise.resolve(args);
+      return Promise.resolve([]);
+    });
   });
 
   test("returns 400 if choreId missing", async () => {
-    const req = createMockRequest("POST", { userId: "user1" });
+    const req = createMockRequest("POST", { userId: "user1", date: "2024-06-15" });
     const res = await POST(req);
     expect(res.status).toBe(400);
   });
 
   test("returns 400 if userId missing", async () => {
-    const req = createMockRequest("POST", { choreId: "chore1" });
+    const req = createMockRequest("POST", { choreId: "chore1", date: "2024-06-15" });
+    const res = await POST(req);
+    expect(res.status).toBe(400);
+  });
+
+  test("returns 400 if date missing", async () => {
+    const req = createMockRequest("POST", { choreId: "chore1", userId: "user1" });
     const res = await POST(req);
     expect(res.status).toBe(400);
   });
@@ -27,17 +41,37 @@ describe("POST /api/chores/complete", () => {
     const req = createMockRequest("POST", {
       choreId: "chore1",
       userId: "user1",
+      date: "2024-06-15",
     });
     const res = await POST(req);
     expect(res.status).toBe(404);
   });
 
-  test("returns 201 and creates completion", async () => {
+  test("returns 403 if user not assigned and chore not claimable", async () => {
     mockPrisma.chore.findUnique.mockResolvedValueOnce({
       id: "chore1",
       points: 5,
+      isClaimable: false,
+      assignments: [{ userId: "user2" }],
     });
-    mockPrisma.choreCompletion.upsert.mockResolvedValueOnce({
+    const req = createMockRequest("POST", {
+      choreId: "chore1",
+      userId: "user1",
+      date: "2024-06-15",
+    });
+    const res = await POST(req);
+    expect(res.status).toBe(403);
+  });
+
+  test("returns 201 for assigned user", async () => {
+    mockPrisma.chore.findUnique.mockResolvedValueOnce({
+      id: "chore1",
+      points: 5,
+      isClaimable: false,
+      assignments: [{ userId: "user1" }],
+    });
+    mockPrisma.choreCompletion.findUnique.mockResolvedValueOnce(null);
+    mockPrisma.choreCompletion.create.mockResolvedValueOnce({
       id: "comp1",
       choreId: "chore1",
       completedBy: "user1",
@@ -48,9 +82,62 @@ describe("POST /api/chores/complete", () => {
     const req = createMockRequest("POST", {
       choreId: "chore1",
       userId: "user1",
+      date: "2024-06-15",
     });
     const res = await POST(req);
     expect(res.status).toBe(201);
+  });
+
+  test("returns 201 for claimable chore by any user", async () => {
+    mockPrisma.chore.findUnique.mockResolvedValueOnce({
+      id: "chore1",
+      points: 3,
+      isClaimable: true,
+      assignments: [],
+    });
+    mockPrisma.choreCompletion.findUnique.mockResolvedValueOnce(null);
+    mockPrisma.choreCompletion.create.mockResolvedValueOnce({
+      id: "comp1",
+      choreId: "chore1",
+      completedBy: "user1",
+      pointsEarned: 3,
+    });
+    mockPrisma.user.update.mockResolvedValueOnce({});
+
+    const req = createMockRequest("POST", {
+      choreId: "chore1",
+      userId: "user1",
+      date: "2024-06-15",
+    });
+    const res = await POST(req);
+    expect(res.status).toBe(201);
+  });
+
+  test("does not double-count points when completion already exists", async () => {
+    mockPrisma.chore.findUnique.mockResolvedValueOnce({
+      id: "chore1",
+      points: 5,
+      isClaimable: false,
+      assignments: [{ userId: "user1" }],
+    });
+    // Existing completion found — should not create or increment
+    mockPrisma.choreCompletion.findUnique.mockResolvedValueOnce({
+      id: "existing",
+      choreId: "chore1",
+      completedBy: "user1",
+      pointsEarned: 5,
+    });
+
+    const req = createMockRequest("POST", {
+      choreId: "chore1",
+      userId: "user1",
+      date: "2024-06-15",
+    });
+    const res = await POST(req);
+    expect(res.status).toBe(201);
+    // create should NOT have been called since completion already exists
+    expect(mockPrisma.choreCompletion.create).not.toHaveBeenCalled();
+    expect(mockPrisma.user.update).not.toHaveBeenCalled();
   });
 });
 
@@ -68,7 +155,7 @@ describe("DELETE /api/chores/complete", () => {
 
   test("returns 400 if choreId missing", async () => {
     const req = createMockRequest("DELETE", undefined, {
-      searchParams: { userId: "user1" },
+      searchParams: { userId: "user1", date: "2024-06-15" },
     });
     const res = await DELETE(req);
     expect(res.status).toBe(400);
@@ -76,7 +163,15 @@ describe("DELETE /api/chores/complete", () => {
 
   test("returns 400 if userId missing", async () => {
     const req = createMockRequest("DELETE", undefined, {
-      searchParams: { choreId: "chore1" },
+      searchParams: { choreId: "chore1", date: "2024-06-15" },
+    });
+    const res = await DELETE(req);
+    expect(res.status).toBe(400);
+  });
+
+  test("returns 400 if date missing", async () => {
+    const req = createMockRequest("DELETE", undefined, {
+      searchParams: { choreId: "chore1", userId: "user1" },
     });
     const res = await DELETE(req);
     expect(res.status).toBe(400);
@@ -85,7 +180,7 @@ describe("DELETE /api/chores/complete", () => {
   test("returns 404 if completion not found", async () => {
     mockPrisma.choreCompletion.findUnique.mockResolvedValueOnce(null);
     const req = createMockRequest("DELETE", undefined, {
-      searchParams: { choreId: "chore1", userId: "user1" },
+      searchParams: { choreId: "chore1", userId: "user1", date: "2024-06-15" },
     });
     const res = await DELETE(req);
     expect(res.status).toBe(404);
@@ -100,7 +195,7 @@ describe("DELETE /api/chores/complete", () => {
     });
 
     const req = createMockRequest("DELETE", undefined, {
-      searchParams: { choreId: "chore1", userId: "user1" },
+      searchParams: { choreId: "chore1", userId: "user1", date: "2024-06-15" },
     });
     const res = await DELETE(req);
     expect(res.status).toBe(200);
